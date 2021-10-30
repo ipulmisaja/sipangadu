@@ -17,6 +17,6 @@ Fitur aplikasi ini antara lain :
 - Bootstrap 4
 
 ## Informasi Developer
-Nama    : Syaifur Rijal S
-Jabatan : Pranata Komputer Ahli Pertama
-Email   : syaifur.rijal@hotmail.com 
+- Nama    : Syaifur Rijal S
+- Jabatan : Pranata Komputer Ahli Pertama
+- Email   : syaifur.rijal@hotmail.com 
