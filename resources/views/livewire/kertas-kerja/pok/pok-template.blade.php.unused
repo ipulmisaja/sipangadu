@@ -1,0 +1,83 @@
+<div class="p-5">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Kode</th>
+                    <th>Uraian</th>
+                    <th>Volume</th>
+                    <th>Harga Satuan</th>
+                    <th>Jumlah</th>
+                </tr>
+                @foreach ($pok as $item)
+                    @if($item->kd_kegiatan === '0000')
+                        <tr class="font-weight-bold bg-primary" style="color:white">
+                            <td>
+                                {{
+                                    $item->kd_departemen . '.' .
+                                    $item->kd_unit . '.' .
+                                    $item->kd_program
+                                }}
+                            </td>
+                            <td>{{ $item->deskripsi }}</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>Rp. {{ number_format($item->total, 0, ',', '.') }},-</td>
+                        </tr>
+                    @elseif($item->kd_kegiatan <> '0000' && $item->kd_output === '000')
+                        <tr class="font-weight-bold bg-info" style="color: white">
+                            <td>{{ $item->kd_kegiatan }}</td>
+                            <td>{{ $item->deskripsi }}</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>Rp. {{ number_format($item->total, 0, ',', '.') }},-</td>
+                        </tr>
+                    @elseif($item->kd_output <> '000' && $item->kd_komponen === '000')
+                        <tr class="font-weight-bold bg-success" style="color: white">
+                            <td>
+                                {{
+                                    $item->kd_kegiatan . '.' .
+                                    $item->kd_output
+                                }}
+                            </td>
+                            <td>{{ $item->deskripsi }}</td>
+                            <td>{{ $item->volume . ' ' . $item->satuan }}</td>
+                            <td>-</td>
+                            <td>Rp. {{ number_format($item->total, 0, ',', '.') }},-</td>
+                        </tr>
+                    @elseif($item->kd_komponen <> '000' && $item->kd_akun === '000000')
+                        <tr class="font-weight-bold bg-warning" style="color: white">
+                            <td>
+                                {{
+                                    $item->kd_kegiatan . '.' .
+                                    $item->kd_output . '.' .
+                                    $item->kd_komponen
+                                }}
+                            </td>
+                            <td>{{ $item->deskripsi }}</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>Rp. {{ number_format($item->total, 0, ',', '.') }},-</td>
+                        </tr>
+                    @elseif($item->kd_akun <> '000000' && $item->kd_detail === 0)
+                        <tr class="font-weight-bold bg-secondary">
+                            <td>{{ $item->kd_akun }}</td>
+                            <td>{{ $item->deskripsi }}</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>Rp. {{ number_format($item->total, 0, ',', '.') }},-</td>
+                        </tr>
+                    @elseif($item->kd_detail !== 0)
+                        <tr>
+                            <td></td>
+                            <td>{{ $item->deskripsi }}</td>
+                            <td>{{ $item->volume . ' ' . $item->satuan }}</td>
+                            <td>Rp. {{ number_format($item->harga_satuan, 0, ',', '.') }},-</td>
+                            <td>Rp. {{ number_format($item->total, 0, ',', '.') }},-</td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
