@@ -143,7 +143,7 @@
                         <span>Kepala</span><br>
                         <span>BPS Provinsi Sulawesi Barat</span><br><br>
                         @if ($kpa == 1)
-                            <img src="{{ public_path('template/ttd.jpg') }}" width="125"><br>
+                            <img src="{{ public_path('template/kabps_ttd.jpg') }}" width="125"><br>
                         @else
                             <br>
                         @endif
@@ -163,7 +163,26 @@
                             @endif
                         </span><br><br>
                         @if ($koordinator == 1)
-                            <img src="{{ public_path('template/ttd.jpg') }}" width="125"><br>
+                            @switch($nama_unit_koordinator_boss->nama)
+                                @case("Markus Uda")
+                                    <img src="{{ public_path('template/markus_uda.jpg') }}" width="125"><br>
+                                    @break
+                                @case("Heni Djumadi")
+                                    <img src="{{ public_path('template/heni_djumadi.jpg') }}" width="125"><br>
+                                    @break
+                                @case("Muhammad Nurbakti")
+                                    <img src="{{ public_path('template/muhammad_nurbakti.jpg') }}" width="125"><br>
+                                    @break
+                                @case("Fredy Takaya")
+                                    <img src="{{ public_path('template/fredy_takaya.jpg') }}" width="125"><br>
+                                    @break
+                                @case("M. La'bi")
+                                    <img src="{{ public_path('template/labi.jpg') }}" width="125"><br>
+                                    @break
+                                @case("Prayitno")
+                                    <img src="{{ public_path('template/prayitno.jpg') }}" width="125"><br>
+                                    @break
+                            @endswitch
                         @else
                             <br>
                         @endif
