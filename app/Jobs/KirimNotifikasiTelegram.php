@@ -36,7 +36,7 @@ class KirimNotifikasiTelegram implements ShouldQueue
     public function handle()
     {
         Telegram::sendMessage([
-            'chat_id'    => "@ipulmisaja",
+            'chat_id'    => "825998479",
             'parse_mode' => 'html',
             'text'       => $this->pesan
         ]);
