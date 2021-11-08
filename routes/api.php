@@ -73,7 +73,7 @@ Route::post('/bot/webhook', function() {
 
                         $collection = collect($json);
 
-                        $data = array_values($collection->where('nama', $result->nama)->toArray());
+                        $data = array_values($collection->where('bps_id', $result->bps_id)->toArray());
 
                         $pesan = "Username : " . $result->username . "\n" . "Password : " . $data[0]->password;
 
