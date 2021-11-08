@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Jobs\KirimNotifikasiTelegram;
+// use App\Jobs\KirimNotifikasiTelegram;
 use App\Models\Berkas;
 use App\Models\PaketMeeting;
 use App\Models\Payment;
@@ -50,14 +50,14 @@ class PaketMeetingRepository
 
             $message = 'Informasi paket meeting telah disimpan.';
 
-            $telegramId = $this->getParentTelegramId($pemeriksaan);
+            // $telegramId = $this->getParentTelegramId($pemeriksaan);
 
-            is_null($telegramId) ?:
-                KirimNotifikasiTelegram::dispatch(
-                    $telegramId,
-                    "Pengajuan belanja " . $paketMeeting->nama . " telah dibuat oleh " .
-                    Auth::user()->nama . ". Mohon dilakukan pemeriksaan, terima kasih."
-                );
+            // is_null($telegramId) ?:
+            //     KirimNotifikasiTelegram::dispatch(
+            //         $telegramId,
+            //         "Pengajuan belanja " . $paketMeeting->nama . " telah dibuat oleh " .
+            //         Auth::user()->nama . ". Mohon dilakukan pemeriksaan, terima kasih."
+            //     );
 
             DB::commit();
         } catch(Exception $error) {
@@ -89,25 +89,25 @@ class PaketMeetingRepository
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
                     if ($data->approval_state == 1) {
-                        $binagram   = $this->getUserIdByRole('binagram');
+                        // $binagram   = $this->getUserIdByRole('binagram');
 
-                        $telegramId = $this->getTelegramId($binagram);
+                        // $telegramId = $this->getTelegramId($binagram);
 
-                        is_null($telegramId) ?:
-                            KirimNotifikasiTelegram::dispatch(
-                                $telegramId,
-                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah diperiksa oleh koordinator fungsi/kepala bidang." .
-                                "\n\nMohon diperiksa kembali, terima kasih."
-                            );
+                        // is_null($telegramId) ?:
+                        //     KirimNotifikasiTelegram::dispatch(
+                        //         $telegramId,
+                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah diperiksa oleh koordinator fungsi/kepala bidang." .
+                        //         "\n\nMohon diperiksa kembali, terima kasih."
+                        //     );
                     } elseif ($data->approval_state == 2) {
-                        $telegramId = $this->getTelegramId($data->activity->user_id);
+                        // $telegramId = $this->getTelegramId($data->activity->user_id);
 
-                        is_null($telegramId) ?:
-                            KirimNotifikasiTelegram::dispatch(
-                                $telegramId,
-                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " ditolak oleh koordinator fungsi/kepala bidang." .
-                                "\n\nMohon lakukan perbaikan, terima kasih."
-                            );
+                        // is_null($telegramId) ?:
+                        //     KirimNotifikasiTelegram::dispatch(
+                        //         $telegramId,
+                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " ditolak oleh koordinator fungsi/kepala bidang." .
+                        //         "\n\nMohon lakukan perbaikan, terima kasih."
+                        //     );
                     } else {}
 
                     DB::commit();
@@ -130,16 +130,16 @@ class PaketMeetingRepository
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
                     if ($data->approval_state > 0) {
-                        $ppk = $this->getUserIdByRole('ppk');
+                        // $ppk = $this->getUserIdByRole('ppk');
 
-                        $telegramId = $this->getTelegramId($ppk);
+                        // $telegramId = $this->getTelegramId($ppk);
 
-                        is_null($telegramId) ?:
-                            KirimNotifikasiTelegram::dispatch(
-                                $telegramId,
-                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah diperiksa oleh SKF Perencana." .
-                                "\n\nMohon diperiksa kembali, terima kasih."
-                            );
+                        // is_null($telegramId) ?:
+                        //     KirimNotifikasiTelegram::dispatch(
+                        //         $telegramId,
+                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah diperiksa oleh SKF Perencana." .
+                        //         "\n\nMohon diperiksa kembali, terima kasih."
+                        //     );
                     }
 
                     DB::commit();
@@ -161,38 +161,40 @@ class PaketMeetingRepository
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
                     if ($data->approval_state == 1) {
-                        $telegramId = $this->getTelegramId($data->activity->user_id);
+                        // $telegramId = $this->getTelegramId($data->activity->user_id);
 
-                        is_null($telegramId) ?:
-                            KirimNotifikasiTelegram::dispatch(
-                                $telegramId,
-                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " disetujui oleh PPK."
-                            );
+                        // is_null($telegramId) ?:
+                        //     KirimNotifikasiTelegram::dispatch(
+                        //         $telegramId,
+                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " disetujui oleh PPK."
+                        //     );
 
 
-                        $kepeghumTelegramId = $this->getUserIdByUnit('kepeghum');
+                        // $kepeghumTelegramId = $this->getUserIdByUnit('kepeghum');
 
-                        is_null($kepeghumTelegramId) ?:
-                            KirimNotifikasiTelegram::dispatch(
-                                $kepeghumTelegramId,
-                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah disetujui PPK. Mohon dapat ditindaklanjuti, terima kasih."
-                            );
+                        // is_null($kepeghumTelegramId) ?:
+                        //     KirimNotifikasiTelegram::dispatch(
+                        //         $kepeghumTelegramId,
+                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah disetujui PPK. Mohon dapat ditindaklanjuti, terima kasih."
+                        //     );
 
-                        $keuanganTelegramId = $this->getUserIdByUnit('keuangan');
+                        // $keuanganTelegramId = $this->getUserIdByUnit('keuangan');
 
-                        is_null($keuanganTelegramId) ?:
-                            KirimNotifikasiTelegram::dispatch(
-                                $keuanganTelegramId,
-                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah disetujui PPK. Mohon dapat ditindaklanjuti, terima kasih."
-                            );
+                        // is_null($keuanganTelegramId) ?:
+                        //     KirimNotifikasiTelegram::dispatch(
+                        //         $keuanganTelegramId,
+                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah disetujui PPK. Mohon dapat ditindaklanjuti, terima kasih."
+                        //     );
 
-                        $barjasTelegramId   = $this->getUserIdByUnit('pengadaan-barjas');
+                        // $barjasTelegramId   = $this->getUserIdByUnit('pengadaan-barjas');
 
-                        is_null($barjasTelegramId) ?:
-                            KirimNotifikasiTelegram::dispatch(
-                                $barjasTelegramId,
-                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah disetujui PPK. Mohon dapat ditindaklanjuti, terima kasih."
-                            );
+                        // is_null($barjasTelegramId) ?:
+                        //     KirimNotifikasiTelegram::dispatch(
+                        //         $barjasTelegramId,
+                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah disetujui PPK. Mohon dapat ditindaklanjuti, terima kasih."
+                        //     );
+
+                        $data->activity->update(['approve' => 1]);
 
                         TindakLanjut::create([
                             'reference_id'   => $data->activity->reference_id,
@@ -204,14 +206,15 @@ class PaketMeetingRepository
                             'user_id'      => $data->activity->user_id
                         ]);
                     } elseif ($data->approval_state == 2) {
-                        $telegramId = $this->getTelegramId($data->activity->user_id);
+                        $data->activity->update(['approve' => 2]);
+                        // $telegramId = $this->getTelegramId($data->activity->user_id);
 
-                        is_null($telegramId) ?:
-                            KirimNotifikasiTelegram::dispatch(
-                                $telegramId,
-                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " ditolak oleh PPK." .
-                                "\n\nMohon lakukan perbaikan, terima kasih."
-                            );
+                        // is_null($telegramId) ?:
+                        //     KirimNotifikasiTelegram::dispatch(
+                        //         $telegramId,
+                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " ditolak oleh PPK." .
+                        //         "\n\nMohon lakukan perbaikan, terima kasih."
+                        //     );
                     }
 
                     DB::commit();
