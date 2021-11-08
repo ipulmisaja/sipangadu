@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,7 +22,7 @@ class KirimNotifikasiTelegram implements ShouldQueue
      */
     public function __construct($telegramId, $pesan)
     {
-        $this->telegramId = '@' . $telegramId;
+        $this->telegramId = $telegramId;
 
         $this->pesan = $pesan;
     }
@@ -36,7 +35,7 @@ class KirimNotifikasiTelegram implements ShouldQueue
     public function handle()
     {
         Telegram::sendMessage([
-            'chat_id'    => "825998479",
+            'chat_id'    => $this->telegramId,
             'parse_mode' => 'html',
             'text'       => $this->pesan
         ]);
