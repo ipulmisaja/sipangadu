@@ -3,7 +3,6 @@
 use App\Jobs\KirimNotifikasiTelegram;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/bot/webhook', function() {
@@ -18,8 +17,6 @@ Route::post('/bot/webhook', function() {
             switch ($message->text)
             {
                 case '/start' :
-                    Log::info($message->chat->username);
-
                     $result = User::where('telegram_id', $message->chat->username);
 
                     if($result->count() == 1) {
@@ -47,7 +44,7 @@ Route::post('/bot/webhook', function() {
 
                                 if(!is_null($result)) {
                                     $result->update([
-                                        'telegram_id' => $message->chat->username
+                                        'telegram_id' => '@' . $message->chat->username
                                     ]);
 
                                     $pesan = "Telegram anda telah diverifikasi, selamat datang " . $result->nama . ".\nAnda dapat menggunakan layanan SIPANGADU yang beralamat di https://bpsprovsulbar.id/sipangadu/. \n\n Untuk mendapatkan username dan password sementara ketik <b>akun</b>.";
