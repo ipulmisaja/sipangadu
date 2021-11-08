@@ -3,6 +3,7 @@
 use App\Jobs\KirimNotifikasiTelegram;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/bot/webhook', function() {
@@ -17,6 +18,8 @@ Route::post('/bot/webhook', function() {
             switch ($message->text)
             {
                 case '/start' :
+                    Log::info($message->chat->username);
+
                     $result = User::where('telegram_id', $message->chat->username);
 
                     if($result->count() == 1) {
