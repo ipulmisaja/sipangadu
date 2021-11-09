@@ -57,7 +57,7 @@ Route::post('/bot/webhook', function() {
                                     } else {
                                         KirimNotifikasiTelegram::dispatch(
                                             $message->from->id,
-                                            "Maaf, Data yang anda gunakan sudah pernah diverifikasi."
+                                            "Data yang anda berikan sudah pernah diverifikasi."
                                         );
                                     }
                                 } else {
@@ -72,7 +72,7 @@ Route::post('/bot/webhook', function() {
                                 if($result->bps_id === $idBps && $result->email === $email) {
                                     KirimNotifikasiTelegram::dispatch(
                                         $message->from->id,
-                                        'Maaf, Data yang anda gunakan sudah pernah diverifikasi.'
+                                        'Data yang anda berikan sudah pernah diverifikasi.'
                                     );
                                 } else {
                                     KirimNotifikasiTelegram::dispatch(
