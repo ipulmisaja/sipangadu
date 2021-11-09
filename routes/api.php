@@ -49,7 +49,7 @@ Route::post('/bot/webhook', function() {
                                             'telegram_id' => $message->from->id
                                         ]);
 
-                                        $pesan = "Akun anda telah diverifikasi, selamat datang " . $result->nama .
+                                        $pesan = "Akun anda telah diverifikasi, selamat datang " . $query->nama .
                                                 ".\nAnda dapat menggunakan layanan SIPANGADU yang beralamat di https://bpsprovsulbar.id/sipangadu/.
                                                 \n\n Untuk mendapatkan username dan password sementara ketik <b>akun</b>.";
 
