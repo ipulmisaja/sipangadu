@@ -38,13 +38,13 @@ class Index extends Component
         // sisa
         // daftar orang dl sort by jumlah dl
 
-        if (Auth::user()->hasRole(['koordinator, ppk, kpa, binagram'])) {
+        // if (Auth::user()->hasRole(['koordinator, ppk, kpa, binagram'])) {
 
-        } else {
-            [
-                'pengajuan' => Pemeriksaan::groupBy('approve')->select('approve', DB::raw('count(*) as total'))->get()
-            ];
-        }
+        // } else {
+        //     [
+        //         'pengajuan' => Pemeriksaan::groupBy('approve')->select('approve', DB::raw('count(*) as total'))->get()
+        //     ];
+        // }
 
         return view('livewire.dashboard.index', [
             'total' => Pok::totalBudget(),
