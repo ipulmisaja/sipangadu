@@ -17,56 +17,74 @@ Route::post('/bot/webhook', function() {
             switch ($message->text)
             {
                 case '/start' :
-                    $result = User::where('telegram_id', $message->chat->username);
+                    $result = User::where('telegram_id', $message->from->id);
 
                     if($result->count() == 1) {
                         // Pesan pertama setelah bot aktif
-                        KirimNotifikasiTelegram::dispatch($message->chat->username, "Selamat Datang " . $result->first('nama')->nama);
+                        KirimNotifikasiTelegram::dispatch($message->from->id, "Selamat Datang " . $result->first('nama')->nama);
                     } else {
                         // Pesan untuk melakukan verifikasi ID Telegram
-                        $pesan = "Selamat Datang, verifikasi akun anda dengan mengetik <i>verifikasi#nip-bps#email-bps</i> untuk dapat menggunakan layanan SIPANGADU. \n\n Contoh : <b>verifikasi#340012345#pegawai76@bps.go.id</b>";
+                        $pesan = "Selamat Datang, verifikasi akun anda dengan mengetik <i>verifikasi#nip_bps#email_bps</i> untuk dapat menggunakan layanan SIPANGADU.
+                                 \n\n Contoh : <b>verifikasi#340012345#admin@bps.go.id</b>";
 
-                        KirimNotifikasiTelegram::dispatch($message->chat->username, $pesan);
+                        KirimNotifikasiTelegram::dispatch($message->from->id, $pesan);
                     }
                     break;
                 default :
                     $pesan = explode('#', $message->text);
 
                     if ($pesan[0] === 'verifikasi') {
-                        $bps_id = $pesan[1];
-                        $email  = $pesan[2];
+                        $idBps = $pesan[1];
+                        $email = $pesan[2];
 
-                        $result = User::where('telegram_id', $message->chat->username)->first();
+                        $result = User::where('telegram_id', $message->from->id)->first();
 
                         switch(is_null($result)) {
                             case true:
-                                $result = User::where('bps_id', $bps_id)->where('email', $email)->first();
+                                $query = User::where('bps_id', $idBps)->where('email', $email)->first();
 
-                                if(!is_null($result)) {
-                                    $result->update([
-                                        'telegram_id' => $message->chat->username
-                                    ]);
+                                if(!is_null($query)) {
+                                    if (is_null($query->telegram_id)) {
+                                        $query->update([
+                                            'telegram_id' => $message->from->id
+                                        ]);
 
-                                    $pesan = "Telegram anda telah diverifikasi, selamat datang " . $result->nama . ".\nAnda dapat menggunakan layanan SIPANGADU yang beralamat di https://bpsprovsulbar.id/sipangadu/. \n\n Untuk mendapatkan username dan password sementara ketik <b>akun</b>.";
+                                        $pesan = "Akun anda telah diverifikasi, selamat datang " . $result->nama .
+                                                ".\nAnda dapat menggunakan layanan SIPANGADU yang beralamat di https://bpsprovsulbar.id/sipangadu/.
+                                                \n\n Untuk mendapatkan username dan password sementara ketik <b>akun</b>.";
 
-                                    KirimNotifikasiTelegram::dispatch($message->chat->username, $pesan);
-
+                                        KirimNotifikasiTelegram::dispatch($message->from->id, $pesan);
+                                    } else {
+                                        KirimNotifikasiTelegram::dispatch(
+                                            $message->from->id,
+                                            "Maaf, Data yang anda gunakan sudah pernah diverifikasi."
+                                        );
+                                    }
                                 } else {
-                                    KirimNotifikasiTelegram::dispatch($message->chat->username, 'Data yang anda berikan tidak dapat diverifikasi, silahkan hubungi administrator.');
+                                    KirimNotifikasiTelegram::dispatch(
+                                        $message->from->id,
+                                        'Data anda tidak ada di dalam sistem kami, silahkan hubungi administrator.'
+                                    );
                                 }
 
                                 break;
                             case false:
-                                if($result->email === $email && $result->bps_id === $bps_id) {
-                                    KirimNotifikasiTelegram::dispatch($message->chat->username, 'Anda sudah melakukan verifikasi pada akun ini.');
+                                if($result->bps_id === $idBps && $result->email === $email) {
+                                    KirimNotifikasiTelegram::dispatch(
+                                        $message->from->id,
+                                        'Maaf, Data yang anda gunakan sudah pernah diverifikasi.'
+                                    );
                                 } else {
-                                    KirimNotifikasiTelegram::dispatch($message->chat->username, 'Anda tidak diperkenankan melakukan verifikasi lebih dari satu akun.');
+                                    KirimNotifikasiTelegram::dispatch(
+                                        $message->from->id,
+                                        'Anda tidak diperkenankan melakukan verifikasi lebih dari satu akun.'
+                                    );
                                 }
 
                                 break;
                         }
                     } elseif ($pesan[0] === 'akun') {
-                        $result = User::where('telegram_id', $message->chat->username)->first();
+                        $result = User::where('telegram_id', $message->from->id)->first();
 
                         $json = json_decode(File::get('database/data/user7600.json'));
 
@@ -76,7 +94,7 @@ Route::post('/bot/webhook', function() {
 
                         $pesan = "Username : " . $result->username . "\n" . "Password : " . $data[0]->password;
 
-                        KirimNotifikasiTelegram::dispatch($message->chat->username, $pesan);
+                        KirimNotifikasiTelegram::dispatch($message->from->id, $pesan);
 
                     } else {}
             }
