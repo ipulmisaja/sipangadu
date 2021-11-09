@@ -57,7 +57,7 @@ Route::post('/bot/webhook', function() {
                                     } else {
                                         KirimNotifikasiTelegram::dispatch(
                                             $message->from->id,
-                                            "Maaf, Data yang anda gunakan sudah pernah diverifikasi."
+                                            "Maaf, Data yang anda gunakan sudah pernah diverifikasi. LOL"
                                         );
                                     }
                                 } else {

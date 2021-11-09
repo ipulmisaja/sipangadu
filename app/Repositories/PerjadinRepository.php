@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-// use App\Jobs\KirimNotifikasiTelegram;
+use App\Jobs\KirimNotifikasiTelegram;
 use App\Models\DetailPerjalananDinas;
 use App\Models\Berkas;
 use App\Models\Pemeriksaan;
@@ -55,14 +55,14 @@ class PerjadinRepository
                 'tanggal_pengajuan' => $perjadin->tanggal_pengajuan
             ]);
 
-            // $telegramId = $this->getParentTelegramId($pemeriksaan);
+            $telegramId = $this->getParentTelegramId($pemeriksaan);
 
-            // is_null($telegramId) ?:
-            //     KirimNotifikasiTelegram::dispatch(
-            //         $telegramId,
-            //         "Pengajuan belanja " . $perjadin->nama . " telah dibuat oleh " .
-            //         Auth::user()->name . ". Mohon dilakukan pemeriksaan, terima kasih."
-            //     );
+            is_null($telegramId) ?:
+                KirimNotifikasiTelegram::dispatch(
+                    $telegramId,
+                    "Pengajuan belanja " . $perjadin->nama . " telah dibuat oleh " .
+                    Auth::user()->name . ". Mohon dilakukan pemeriksaan, terima kasih."
+                );
 
             $message = 'Informasi perjalanan dinas telah disimpan.';
 
@@ -94,25 +94,25 @@ class PerjadinRepository
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
                     if ($data->approval_state == 1) {
-                        // $binagram   = $this->getUserIdByRole('binagram');
+                        $binagram   = $this->getUserIdByRole('binagram');
 
-                        // $telegramId = $this->getTelegramId($binagram);
+                        $telegramId = $this->getTelegramId($binagram);
 
-                        // is_null($telegramId) ?:
-                        //     KirimNotifikasiTelegram::dispatch(
-                        //         $telegramId,
-                        //         "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " telah diperiksa oleh koordinator fungsi/kepala bidang." .
-                        //         "\n\nMohon diperiksa kembali, terima kasih."
-                        //     );
+                        is_null($telegramId) ?:
+                            KirimNotifikasiTelegram::dispatch(
+                                $telegramId,
+                                "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " telah diperiksa oleh koordinator fungsi/kepala bidang." .
+                                "\n\nMohon diperiksa kembali, terima kasih."
+                            );
                     } elseif ($data->approval_state == 2) {
-                        // $telegramId = $this->getTelegramId($data->activity->user_id);
+                        $telegramId = $this->getTelegramId($data->activity->user_id);
 
-                        // is_null($telegramId) ?:
-                        //     KirimNotifikasiTelegram::dispatch(
-                        //         $telegramId,
-                        //         "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " ditolak oleh koordinator fungsi/kepala bidang." .
-                        //         "\n\nMohon lakukan perbaikan, terima kasih."
-                        //     );
+                        is_null($telegramId) ?:
+                            KirimNotifikasiTelegram::dispatch(
+                                $telegramId,
+                                "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " ditolak oleh koordinator fungsi/kepala bidang." .
+                                "\n\nMohon lakukan perbaikan, terima kasih."
+                            );
                     }
 
                     $message = "Informasi pemeriksaan telah disimpan.";
@@ -141,16 +141,16 @@ class PerjadinRepository
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
                     if ($data->approval_state > 0) {
-                        // $ppk = $this->getUserIdByRole('ppk');
+                        $ppk = $this->getUserIdByRole('ppk');
 
-                        // $telegramId = $this->getTelegramId($ppk);
+                        $telegramId = $this->getTelegramId($ppk);
 
-                        // is_null($telegramId) ?:
-                        //     KirimNotifikasiTelegram::dispatch(
-                        //         $telegramId,
-                        //         "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " telah diperiksa oleh SKF Perencana." .
-                        //         "\n\nMohon diperiksa kembali, terima kasih."
-                        //     );
+                        is_null($telegramId) ?:
+                            KirimNotifikasiTelegram::dispatch(
+                                $telegramId,
+                                "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " telah diperiksa oleh SKF Perencana." .
+                                "\n\nMohon diperiksa kembali, terima kasih."
+                            );
                     }
 
                     $message = "Informasi pemeriksaan telah disimpan.";
@@ -179,16 +179,16 @@ class PerjadinRepository
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
                     if ($data->approval_state > 0) {
-                        // $kpa = $this->getUserIdByRole('kpa');
+                        $kpa = $this->getUserIdByRole('kpa');
 
-                        // $telegramId = $this->getTelegramId($kpa);
+                        $telegramId = $this->getTelegramId($kpa);
 
-                        // is_null($telegramId) ?:
-                        //     KirimNotifikasiTelegram::dispatch(
-                        //         $telegramId,
-                        //         "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " telah diperiksa oleh PPK." .
-                        //         "\n\nMohon diperiksa kembali, terima kasih."
-                        //     );
+                        is_null($telegramId) ?:
+                            KirimNotifikasiTelegram::dispatch(
+                                $telegramId,
+                                "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " telah diperiksa oleh PPK." .
+                                "\n\nMohon diperiksa kembali, terima kasih."
+                            );
                     }
 
                     $message = "Informasi pemeriksaan telah disimpan.";
@@ -217,21 +217,21 @@ class PerjadinRepository
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
                     if ($data->approval_state == 1) {
-                        // $telegramId = $this->getTelegramId($data->activity->user_id);
+                        $telegramId = $this->getTelegramId($data->activity->user_id);
 
-                        // is_null($telegramId) ?:
-                        //     KirimNotifikasiTelegram::dispatch(
-                        //         $telegramId,
-                        //         "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " disetujui oleh Kepala BPS."
-                        //     );
+                        is_null($telegramId) ?:
+                            KirimNotifikasiTelegram::dispatch(
+                                $telegramId,
+                                "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " disetujui oleh Kepala BPS."
+                            );
 
-                        // $keuanganTelegramId = $this->getUserIdByUnit('keuangan');
+                        $keuanganTelegramId = $this->getUserIdByUnit('keuangan');
 
-                        // is_null($keuanganTelegramId) ?:
-                        //     KirimNotifikasiTelegram::dispatch(
-                        //         $keuanganTelegramId,
-                        //         "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah disetujui Kepala BPS. Mohon dapat ditindaklanjuti, terima kasih."
-                        //     );
+                        is_null($keuanganTelegramId) ?:
+                            KirimNotifikasiTelegram::dispatch(
+                                $keuanganTelegramId,
+                                "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " telah disetujui Kepala BPS. Mohon dapat ditindaklanjuti, terima kasih."
+                            );
 
                         $data->activity->update(['approve' => 1]);
 
@@ -258,14 +258,14 @@ class PerjadinRepository
                         }
                     } elseif ($data->approval_state == 2) {
                         $data->activity->update(['approve' => 2]);
-                        // $telegramId = $this->getTelegramId($data->activity->user_id);
+                        $telegramId = $this->getTelegramId($data->activity->user_id);
 
-                        // is_null($telegramId) ?:
-                        //     KirimNotifikasiTelegram::dispatch(
-                        //         $telegramId,
-                        //         "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " ditolak oleh Kepala BPS." .
-                        //         "\n\nMohon lakukan perbaikan, terima kasih."
-                        //     );
+                        is_null($telegramId) ?:
+                            KirimNotifikasiTelegram::dispatch(
+                                $telegramId,
+                                "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " ditolak oleh Kepala BPS." .
+                                "\n\nMohon lakukan perbaikan, terima kasih."
+                            );
                     }
 
                     $message = "Informasi pemeriksaan telah disimpan.";
