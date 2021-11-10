@@ -34,6 +34,7 @@ class LemburRepository
                 'nama'              => $data->nama_kegiatan,
                 'pok_id'            => Pok::where('kd_akun', '512211')->where('kd_detail', 1)->pluck('id')[0],
                 'catatan'           => $data->catatan ?? null,
+                'user_id'           => Auth::user()->id
             ]);
 
             foreach($data->overtimeList as $item) {

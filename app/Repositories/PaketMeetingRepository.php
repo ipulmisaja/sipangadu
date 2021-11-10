@@ -39,6 +39,7 @@ class PaketMeetingRepository
                 'volume'            => $data->volume,
                 'file'              => $drivePath['basename'],
                 'catatan'           => $data->catatan ?? null,
+                'user_id'           => Auth::user()->id
             ]);
 
             $pemeriksaan = Pemeriksaan::create([

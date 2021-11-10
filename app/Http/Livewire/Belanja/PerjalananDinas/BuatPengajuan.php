@@ -139,10 +139,11 @@ class BuatPengajuan extends Component
         return redirect(env('APP_URL') . 'belanja/perjalanan-dinas');
     }
 
-    public function updatedBudget()
-    {
-        $this->budget = str_replace(".", "", $this->budget);
+    // Masih ada masalah kadang angka berubah sendiri
+    // public function updatedBudget()
+    // {
+    //     $this->budget = str_replace(".", "", $this->budget);
 
-        if ($this->budget !== '') $this->budget = InputMask::mask($this->budget, number_format($this->budget, 0, ',', '.'));
-    }
+    //     if ($this->budget !== '') $this->budget = InputMask::mask($this->budget, number_format($this->budget, 0, ',', '.'));
+    // }
 }
