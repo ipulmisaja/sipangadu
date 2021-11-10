@@ -11,6 +11,7 @@ class PaketMeeting extends Model
 
     protected $fillable = [
         'reference_id',
+        'user_id',
         'tanggal_pengajuan',
         'nomor_pengajuan',
         'nama',
