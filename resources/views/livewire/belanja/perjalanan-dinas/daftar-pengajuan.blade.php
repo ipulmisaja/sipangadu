@@ -41,10 +41,10 @@
                                                     @foreach ($listPerjadin->paginate(20) as $item)
                                                         <tr>
                                                             <td width="12%">
-                                                                {{ DateFormat::convertDateTime($item->tanggal_pengajuan) }}
+                                                                {{ DateFormat::convertDateTime($item->pemeriksaanRelationship->tanggal_pengajuan) }}
                                                             </td>
                                                             <td>
-                                                                {{ $item->perjadinRelationship->nama }}
+                                                                {{ $item->nama }}
                                                             </td>
                                                             <td>
                                                                 <span class="text-muted font-weight-bold">
@@ -52,18 +52,18 @@
                                                                     <span class="ml-1">
                                                                         {{
                                                                             '054.01.' .
-                                                                            $item->perjadinRelationship->pokRelationship->kd_program . '.' .
-                                                                            $item->perjadinRelationship->pokRelationship->kd_kegiatan . '.' .
-                                                                            $item->perjadinRelationship->pokRelationship->kd_kro . '.' .
-                                                                            $item->perjadinRelationship->pokRelationship->kd_ro . '.' .
-                                                                            $item->perjadinRelationship->pokRelationship->kd_komponen . '.' .
-                                                                            $item->perjadinRelationship->pokRelationship->kd_subkomponen . '.' .
-                                                                            $item->perjadinRelationship->pokRelationship->kd_akun . '.' .
-                                                                            $item->perjadinRelationship->pokRelationship->kd_detail
+                                                                            $item->pokRelationship->kd_program . '.' .
+                                                                            $item->pokRelationship->kd_kegiatan . '.' .
+                                                                            $item->pokRelationship->kd_kro . '.' .
+                                                                            $item->pokRelationship->kd_ro . '.' .
+                                                                            $item->pokRelationship->kd_komponen . '.' .
+                                                                            $item->pokRelationship->kd_subkomponen . '.' .
+                                                                            $item->pokRelationship->kd_akun . '.' .
+                                                                            $item->pokRelationship->kd_detail
                                                                         }}
                                                                     </span>
                                                                 </span><br>
-                                                                <span>{{ $item->perjadinRelationship->pokRelationship->deskripsi }}</span>
+                                                                <span>{{ $item->pokRelationship->deskripsi }}</span>
                                                             </td>
                                                             <td>
                                                                 @include('components.state.approval', [

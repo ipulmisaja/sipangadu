@@ -11,7 +11,7 @@ class DaftarPengajuan extends Component
     public function render()
     {
         return view('livewire.belanja.perjalanan-dinas.daftar-pengajuan', [
-            'listPerjadin' => PerjalananDinas::where('user_id', Auth::user()->id)->get()
+            'listPerjadin' => PerjalananDinas::with('pemeriksaanRelationship')->where('user_id', Auth::user()->id)->get()
         ]);
     }
 }

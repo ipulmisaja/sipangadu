@@ -11,7 +11,7 @@ class DaftarPengajuan extends Component
     public function render()
     {
         return view('livewire.belanja.lembur.daftar-pengajuan', [
-            'listLembur' => Lembur::where('user_id', Auth::user()->id)->get()
+            'listLembur' => Lembur::with('pemeriksaanRelationship')->where('user_id', Auth::user()->id)->get()
         ]);
     }
 }

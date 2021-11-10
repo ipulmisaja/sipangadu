@@ -41,27 +41,27 @@
                                                     @foreach ($listLembur->paginate(20) as $item)
                                                         <tr>
                                                             <td width="12%">
-                                                                {{ DateFormat::convertDateTime($item->tanggal_pengajuan) }}
+                                                                {{ DateFormat::convertDateTime($item->pemeriksaanRelationship->tanggal_pengajuan) }}
                                                             </td>
-                                                            <td>{{ $item->lemburRelationship->nama }}</td>
+                                                            <td>{{ $item->nama }}</td>
                                                             <td>
                                                                 <span class="text-muted font-weight-bold">
                                                                     <i class="fas fa-coins"></i>
                                                                     <span class="ml-1">
                                                                         {{
                                                                             '054.01.' .
-                                                                            $item->lemburRelationship->pokRelationship->kd_program . '.' .
-                                                                            $item->lemburRelationship->pokRelationship->kd_kegiatan . '.' .
-                                                                            $item->lemburRelationship->pokRelationship->kd_kro . '.' .
-                                                                            $item->lemburRelationship->pokRelationship->kd_ro . '.' .
-                                                                            $item->lemburRelationship->pokRelationship->kd_komponen . '.' .
-                                                                            $item->lemburRelationship->pokRelationship->kd_subkomponen . '.' .
-                                                                            $item->lemburRelationship->pokRelationship->kd_akun . '.' .
-                                                                            $item->lemburRelationship->pokRelationship->kd_detail
+                                                                            $item->pokRelationship->kd_program . '.' .
+                                                                            $item->pokRelationship->kd_kegiatan . '.' .
+                                                                            $item->pokRelationship->kd_kro . '.' .
+                                                                            $item->pokRelationship->kd_ro . '.' .
+                                                                            $item->pokRelationship->kd_komponen . '.' .
+                                                                            $item->pokRelationship->kd_subkomponen . '.' .
+                                                                            $item->pokRelationship->kd_akun . '.' .
+                                                                            $item->pokRelationship->kd_detail
                                                                         }}
                                                                     </span>
                                                                 </span><br>
-                                                                <span>{{ $item->lemburRelationship->pokRelationship->deskripsi }}</span>
+                                                                <span>{{ $item->pokRelationship->deskripsi }}</span>
                                                             </td>
                                                             <td>
                                                                 @include('components.state.approval', [

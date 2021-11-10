@@ -11,7 +11,7 @@ class DaftarPengajuan extends Component
     public function render()
     {
         return view('livewire.belanja.paket-meeting.daftar-pengajuan', [
-            'listPaketMeeting' => PaketMeeting::where('user_id', Auth::user()->id)->get()
+            'listPaketMeeting' => PaketMeeting::with('pemeriksaanRelationship')->where('user_id', Auth::user()->id)->get()
         ]);
     }
 }

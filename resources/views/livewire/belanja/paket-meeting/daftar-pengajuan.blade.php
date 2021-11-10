@@ -41,27 +41,27 @@
                                                     @foreach ($listPaketMeeting->paginate(20) as $item)
                                                         <tr>
                                                             <td width="12%">
-                                                                {{ DateFormat::convertDateTime($item->tanggal_pengajuan) }}
+                                                                {{ DateFormat::convertDateTime($item->pemeriksaanRelationship->tanggal_pengajuan) }}
                                                             </td>
-                                                            <td>{{ $item->paketMeetingRelationship->nama }}</td>
+                                                            <td>{{ $item->nama }}</td>
                                                             <td>
                                                                 <span class="text-muted font-weight-bold">
                                                                     <i class="fas fa-coins"></i>
                                                                     <span class="ml-1">
                                                                         {{
                                                                             '054.01.' .
-                                                                            $item->paketMeetingRelationship->pokRelationship->kd_program . '.' .
-                                                                            $item->paketMeetingRelationship->pokRelationship->kd_kegiatan . '.' .
-                                                                            $item->paketMeetingRelationship->pokRelationship->kd_kro . '.' .
-                                                                            $item->paketMeetingRelationship->pokRelationship->kd_ro . '.' .
-                                                                            $item->paketMeetingRelationship->pokRelationship->kd_komponen . '.' .
-                                                                            $item->paketMeetingRelationship->pokRelationship->kd_subkomponen . '.' .
-                                                                            $item->paketMeetingRelationship->pokRelationship->kd_akun . '.' .
-                                                                            $item->paketMeetingRelationship->pokRelationship->kd_detail
+                                                                            $item->pokRelationship->kd_program . '.' .
+                                                                            $item->pokRelationship->kd_kegiatan . '.' .
+                                                                            $item->pokRelationship->kd_kro . '.' .
+                                                                            $item->pokRelationship->kd_ro . '.' .
+                                                                            $item->pokRelationship->kd_komponen . '.' .
+                                                                            $item->pokRelationship->kd_subkomponen . '.' .
+                                                                            $item->pokRelationship->kd_akun . '.' .
+                                                                            $item->pokRelationship->kd_detail
                                                                         }}
                                                                     </span>
                                                                 </span><br>
-                                                                <span>{{ $item->paketMeetingRelationship->pokRelationship->deskripsi }}</span>
+                                                                <span>{{ $item->pokRelationship->deskripsi }}</span>
                                                             </td>
                                                             <td>
                                                                 @include('components.state.approval', [
