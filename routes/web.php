@@ -94,5 +94,7 @@ Route::layout('layouts.app')->middleware('auth')->group(function() {
         Route::livewire('webhook', 'setting.webhook.list-of-webhook')->name('webhook');
         Route::livewire('log', 'setting.log.list-of-log')->name('log');
         Route::livewire('log/{log}/show', 'setting.log.show-log')->name('log.show');
+        Route::livewire('tambahan', 'setting.tambahan.daftar-tambahan');
+        Route::livewire('tambahan/konfigurasi-baru', 'setting.tambahan.buat-konfigurasi');
     });
 });

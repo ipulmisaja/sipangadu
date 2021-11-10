@@ -196,7 +196,7 @@
             @endrole
 
             {{-- Pengaturan Aplikasi --}}
-            @if(auth()->user()->hasRole('admin'))
+            @role('admin')
                 <li class="dropdown">
                     <a href="#" class="nav-link has-dropdown">
                         <i class="fas fa-user-cog"></i>
@@ -204,20 +204,23 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li class="mt-2">
-                            <a href="{{ url(env('APP_URL') . 'setting/user') }}" class="nav-link">User</a>
+                            <a href="{{ url(env('APP_URL') . 'setting/user') }}" class="nav-link">- User</a>
                         </li>
                         <li class="mt-2">
-                            <a href="{{ url(env('APP_URL') . 'setting/role') }}" class="nav-link">Hak Akses</a>
+                            <a href="{{ url(env('APP_URL') . 'setting/role') }}" class="nav-link">- Hak Akses</a>
                         </li>
                         <li class="mt-2">
-                            <a href="{{ url(env('APP_URL') . 'setting/webhook') }}">Webhook</a>
+                            <a href="{{ url(env('APP_URL') . 'setting/tambahan') }}" class="nav-link">- Tambahan</a>
                         </li>
                         <li class="mt-2">
-                            <a href="{{ url(env('APP_URL') . 'setting/log') }}" class="nav-link">Log Aplikasi</a>
+                            <a href="{{ url(env('APP_URL') . 'setting/webhook') }}">- Webhook</a>
+                        </li>
+                        <li class="mt-2">
+                            <a href="{{ url(env('APP_URL') . 'setting/log') }}" class="nav-link">- Log Aplikasi</a>
                         </li>
                     </ul>
                 </li>
-            @endif
+            @endrole
         </ul>
     </aside>
 </div>
