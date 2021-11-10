@@ -34,7 +34,8 @@ class PerjadinRepository
                 'pok_id'            => $data->detail,
                 'total'             => $data->budget,
                 'volume'            => $data->volume,
-                'catatan'           => $data->catatan ?? null
+                'catatan'           => $data->catatan ?? null,
+                'user_id'           => Auth::user()->id
             ]);
 
             foreach($data->tripList as $item) {
