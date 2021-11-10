@@ -33,70 +33,88 @@ Route::post('/bot/webhook', function() {
                 default :
                     $pesan = explode('#', $message->text);
 
-                    if ($pesan[0] === 'verifikasi') {
-                        $idBps = $pesan[1];
-                        $email = $pesan[2];
+                    if (count($pesan) === 3) {
+                        if ($pesan[0] === 'verifikasi') {
+                            $idBps = $pesan[1];
+                            $email = $pesan[2];
 
-                        $result = User::where('telegram_id', $message->from->id)->first();
+                            $result = User::where('telegram_id', $message->from->id)->first();
 
-                        switch(is_null($result)) {
-                            case true:
-                                $query = User::where('bps_id', $idBps)->where('email', $email)->first();
+                            switch(is_null($result)) {
+                                case true:
+                                    $query = User::where('bps_id', $idBps)->where('email', $email)->first();
 
-                                if(!is_null($query)) {
-                                    if (is_null($query->telegram_id)) {
-                                        $query->update([
-                                            'telegram_id' => $message->from->id
-                                        ]);
+                                    if(!is_null($query)) {
+                                        if (is_null($query->telegram_id)) {
+                                            $query->update([
+                                                'telegram_id' => $message->from->id
+                                            ]);
 
-                                        $pesan = "Akun anda telah diverifikasi, selamat datang " . $query->nama .
-                                                ".\nAnda dapat menggunakan layanan SIPANGADU yang beralamat di https://bpsprovsulbar.id/sipangadu/.
-                                                \n\n Untuk mendapatkan username dan password sementara ketik <b>akun</b>.";
+                                            $pesan = "Akun anda telah diverifikasi, selamat datang " . $query->nama .
+                                                    ".\nAnda dapat menggunakan layanan SIPANGADU yang beralamat di https://bpsprovsulbar.id/sipangadu/.
+                                                    \n\n Untuk mendapatkan username dan password sementara ketik <b>akun</b>.";
 
-                                        KirimNotifikasiTelegram::dispatch($message->from->id, $pesan);
+                                            KirimNotifikasiTelegram::dispatch($message->from->id, $pesan);
+                                        } else {
+                                            KirimNotifikasiTelegram::dispatch(
+                                                $message->from->id,
+                                                "Data yang anda berikan sudah pernah diverifikasi."
+                                            );
+                                        }
                                     } else {
                                         KirimNotifikasiTelegram::dispatch(
                                             $message->from->id,
-                                            "Data yang anda berikan sudah pernah diverifikasi."
+                                            'Data anda tidak ada di dalam sistem kami, silahkan hubungi administrator.'
                                         );
                                     }
-                                } else {
-                                    KirimNotifikasiTelegram::dispatch(
-                                        $message->from->id,
-                                        'Data anda tidak ada di dalam sistem kami, silahkan hubungi administrator.'
-                                    );
-                                }
 
-                                break;
-                            case false:
-                                if($result->bps_id === $idBps && $result->email === $email) {
-                                    KirimNotifikasiTelegram::dispatch(
-                                        $message->from->id,
-                                        'Data yang anda berikan sudah pernah diverifikasi.'
-                                    );
-                                } else {
-                                    KirimNotifikasiTelegram::dispatch(
-                                        $message->from->id,
-                                        'Anda tidak diperkenankan melakukan verifikasi lebih dari satu akun.'
-                                    );
-                                }
+                                    break;
+                                case false:
+                                    if($result->bps_id === $idBps && $result->email === $email) {
+                                        KirimNotifikasiTelegram::dispatch(
+                                            $message->from->id,
+                                            'Data yang anda berikan sudah pernah diverifikasi.'
+                                        );
+                                    } else {
+                                        KirimNotifikasiTelegram::dispatch(
+                                            $message->from->id,
+                                            'Anda tidak diperkenankan melakukan verifikasi lebih dari satu akun.'
+                                        );
+                                    }
 
-                                break;
+                                    break;
+                            }
+                        } else {
+                            KirimNotifikasiTelegram::dispatch(
+                                $message->from->id,
+                                "Format yang anda kirimkan tidak sesuai dengan ketentuan. Mohon diulang kembali."
+                            );
                         }
-                    } elseif ($pesan[0] === 'akun') {
-                        $result = User::where('telegram_id', $message->from->id)->first();
+                    } elseif(count($pesan) === 1) {
+                        if ($pesan[0] === 'akun') {
+                            $result = User::where('telegram_id', $message->from->id)->first();
 
-                        $json = json_decode(File::get('database/data/user7600.json'));
+                            $json = json_decode(File::get('database/data/user7600.json'));
 
-                        $collection = collect($json);
+                            $collection = collect($json);
 
-                        $data = array_values($collection->where('bps_id', $result->bps_id)->toArray());
+                            $data = array_values($collection->where('bps_id', $result->bps_id)->toArray());
 
-                        $pesan = "Username : " . $result->username . "\n" . "Password : " . $data[0]->password;
+                            $pesan = "Username : " . $result->username . "\n" . "Password : " . $data[0]->password;
 
-                        KirimNotifikasiTelegram::dispatch($message->from->id, $pesan);
-
-                    } else {}
+                            KirimNotifikasiTelegram::dispatch($message->from->id, $pesan);
+                        } else {
+                            KirimNotifikasiTelegram::dispatch(
+                                $message->from->id,
+                                "Format yang anda kirimkan tidak sesuai dengan ketentuan. Mohon diulang kembali."
+                            );
+                        }
+                    } else {
+                        KirimNotifikasiTelegram::dispatch(
+                            $message->from->id,
+                            "Format yang anda kirimkan tidak sesuai dengan ketentuan. Mohon diulang kembali."
+                        );
+                    }
             }
         }
     }
