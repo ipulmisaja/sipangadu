@@ -8,9 +8,9 @@
                 <div class="my-4 py-4">
                     <div class="my-4"></div>
                 </div>
-                {{-- <div class="login-brand">
-                    <img src="{{ secure_asset(env('APP_URL') . 'vendor/stisla/img/stisla-fill.svg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
-                </div> --}}
+                <div class="login-brand">
+                    <img src="{{ secure_asset(env('APP_URL') . 'images/sipangadu.png') }}" alt="logo" class="w-25">
+                </div>
                 <div class="card card-primary">
                     <div class="card-header">
                         <div class="mx-auto font-weight-bold">Sistem Pengawasan Anggaran Terpadu</div>
