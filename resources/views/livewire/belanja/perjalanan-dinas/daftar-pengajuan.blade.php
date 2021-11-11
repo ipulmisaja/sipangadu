@@ -26,7 +26,7 @@
                                 <div class="card-header-form">
                                     <div class="btn-group mb-3" role="group" aria-label="Basic example">
                                         <button type="button" class="btn btn-primary">Daftar Saya (10)</button>
-                                        <button type="button" class="btn btn-dark">Daftar Admin (100)</button>
+                                        <button type="button" class="btn btn-outline-primary">Daftar Admin (100)</button>
                                     </div>
                                 </div>
                             @endrole
