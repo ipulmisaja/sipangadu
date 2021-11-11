@@ -57,6 +57,11 @@ class PerjalananDinas extends Model
         return $this->hasOne(Pemeriksaan::class, 'reference_id', 'reference_id');
     }
 
+    public function userRelationship()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
     public function detailPerjalananDinasRelationship()
     {
         return $this->hasMany(DetailPerjalananDinas::class, 'perjadin_id', 'id');

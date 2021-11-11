@@ -10,7 +10,7 @@
                     <h4>Jumlah Kegiatan Disetujui</h4>
                 </div>
                 <div class="card-body">
-                    5 Kegiatan (dummy)
+                    5 Kegiatan
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
                     <h4>Jumlah Kegiatan Belum Disetujui</h4>
                 </div>
                 <div class="card-body">
-                    5 Kegiatan (dummy)
+                    2 Kegiatan
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
                     <h4>Jumlah Berkas Diunggah</h4>
                 </div>
                 <div class="card-body">
-                    10 Berkas (dummy)
+                    2 Berkas
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
                     <h4>Realisasi Anggaran Anda</h4>
                 </div>
                 <div class="card-body">
-                    Rp. 2.500.000,- (dummy)
+                    Rp. 2.500.000,-
                 </div>
             </div>
         </div>

@@ -22,6 +22,14 @@
                                     Ajukan Perjalanan Dinas
                                 </a>
                             </h4>
+                            @role('admin')
+                                <div class="card-header-form">
+                                    <div class="btn-group mb-3" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-primary">Daftar Saya (10)</button>
+                                        <button type="button" class="btn btn-dark">Daftar Admin (100)</button>
+                                    </div>
+                                </div>
+                            @endrole
                         </div>
                         <div class="card-body">
                             <div class="row">
