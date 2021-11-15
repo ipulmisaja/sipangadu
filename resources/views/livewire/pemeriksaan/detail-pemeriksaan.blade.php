@@ -112,7 +112,7 @@
                                                     <th class="text-center">Selesai Jam</th>
                                                     <th class="text-center">Durasi (Jam)</th>
                                                 </tr>
-                                                @foreach ($item->$relationship->detailLemburRelationship as $item)
+                                                @foreach ($activityGroup[0]->$relationship->detailLemburRelationship as $item)
                                                     @if($loop->odd)
                                                         <tr style="background-color: rgba(0,0,0,.03)">
                                                             <td>
