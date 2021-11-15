@@ -206,7 +206,7 @@
                         <span>Mengetahui,</span><br>
                         <span>Pejabat Pembuat Komitmen</span><br><br>
                         @if ($ppk == 1)
-                            <img src="{{ public_path('template/ttd.jpg') }}" width="125"><br>
+                            <img src="{{ public_path('template/prayitno.png') }}" width="125"><br>
                         @else
                             <br>
                         @endif
