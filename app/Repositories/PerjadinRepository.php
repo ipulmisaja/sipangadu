@@ -8,7 +8,6 @@ use App\Models\Berkas;
 use App\Models\Pemeriksaan;
 use App\Models\PerjalananDinas;
 use App\Models\TindakLanjut;
-use App\Models\Unit;
 use App\Traits\Commentable;
 use App\Traits\HasTelegram;
 use App\Traits\UserIdTrait;
@@ -179,7 +178,7 @@ class PerjadinRepository
 
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
-                    if ($data->approval_state > 0) {
+                    if ($data->approval_state == 1) {
                         $kpa = $this->getUserIdByRole('kpa');
 
                         $telegramId = $this->getTelegramId($kpa);
@@ -189,6 +188,37 @@ class PerjadinRepository
                                 $telegramId,
                                 "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " telah diperiksa oleh PPK." .
                                 "\n\nMohon diperiksa kembali, terima kasih."
+                            );
+
+                        TindakLanjut::create([
+                            'reference_id'   => $data->activity->reference_id,
+                            'tanggal_dibuat' => Carbon::now()
+                        ]);
+
+                        $tripDetail = DetailPerjalananDinas::where('perjadin_id', $data->activity->perjadinRelationship->id)->get();
+
+                        foreach($tripDetail as $trip) {
+                            // Pemberian Nomor Urut Surat Tugas
+                            if(is_null(DetailPerjalananDinas::max('mail_number'))) {
+                                $trip->update(['mail_number' => 1]);
+                            } else {
+                                $max = DetailPerjalananDinas::max('mail_number');
+                                $trip->update(['mail_number' => $max + 1]);
+                            }
+
+                            Berkas::create([
+                                'reference_id' => $data->activity->reference_id,
+                                'user_id'      => $trip->user_id
+                            ]);
+                        }
+                    } elseif($data->approval_state == 2) {
+                        $telegramId = $this->getTelegramId($data->activity->user_id);
+
+                        is_null($telegramId) ?:
+                            KirimNotifikasiTelegram::dispatch(
+                                $telegramId,
+                                "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " ditolak oleh pejabat pembuat komitmen." .
+                                "\n\nMohon lakukan perbaikan, terima kasih."
                             );
                     }
 
@@ -218,6 +248,7 @@ class PerjadinRepository
                     $this->setComment($data->activity, $data->approval_state, $data->comment, $role);
 
                     if ($data->approval_state == 1) {
+                        // Kirim ke user yang mengajukan
                         $telegramId = $this->getTelegramId($data->activity->user_id);
 
                         is_null($telegramId) ?:
@@ -226,6 +257,7 @@ class PerjadinRepository
                                 "Pengajuan belanja " . $data->activity->perjadinRelationship->nama . " disetujui oleh Kepala BPS."
                             );
 
+                        // Kirim ke keuangan
                         $keuanganTelegramId = $this->getUserIdByUnit('keuangan');
 
                         is_null($keuanganTelegramId) ?:
@@ -235,28 +267,6 @@ class PerjadinRepository
                             );
 
                         $data->activity->update(['approve' => 1]);
-
-                        TindakLanjut::create([
-                            'reference_id'   => $data->activity->reference_id,
-                            'tanggal_dibuat' => Carbon::now()
-                        ]);
-
-                        $tripDetail = DetailPerjalananDinas::where('perjadin_id', $data->activity->perjadinRelationship->id)->get();
-
-                        foreach($tripDetail as $trip) {
-                            // Pemberian Nomor Urut Surat Tugas
-                            if(is_null(DetailPerjalananDinas::max('mail_number'))) {
-                                $trip->update(['mail_number' => 1]);
-                            } else {
-                                $max = DetailPerjalananDinas::max('mail_number');
-                                $trip->update(['mail_number' => $max + 1]);
-                            }
-
-                            Berkas::create([
-                                'reference_id' => $data->activity->reference_id,
-                                'user_id'      => $trip->user_id
-                            ]);
-                        }
                     } elseif ($data->approval_state == 2) {
                         $data->activity->update(['approve' => 2]);
                         $telegramId = $this->getTelegramId($data->activity->user_id);
