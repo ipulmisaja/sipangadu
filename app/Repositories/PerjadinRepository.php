@@ -83,9 +83,9 @@ class PerjadinRepository
         switch($role)
         {
             case 'koordinator' :
-                try {
-                    DB::beginTransaction();
+                DB::beginTransaction();
 
+                try {
                     $data->activity->update([
                         'approve_kf'         => $data->approval_state,
                         'tanggal_approve_kf' => Carbon::now()
@@ -130,9 +130,9 @@ class PerjadinRepository
 
                 break;
             case 'binagram' :
-                try {
-                    DB::beginTransaction();
+                DB::beginTransaction();
 
+                try {
                     $data->activity->update([
                         'approve_binagram'         => $data->approval_state,
                         'tanggal_approve_binagram' => Carbon::now()
@@ -168,9 +168,9 @@ class PerjadinRepository
 
                 break;
             case 'ppk':
-                try {
-                    DB::beginTransaction();
+                DB::beginTransaction();
 
+                try {
                     $data->activity->update([
                         'approve_ppk'         => $data->approval_state,
                         'tanggal_approve_ppk' => Carbon::now()
@@ -237,9 +237,9 @@ class PerjadinRepository
 
                 break;
             case 'kpa':
-                try {
-                    DB::beginTransaction();
+                DB::beginTransaction();
 
+                try {
                     $data->activity->update([
                         'approve_kepala'         => $data->approval_state,
                         'tanggal_approve_kepala' => Carbon::now()

@@ -31,7 +31,7 @@ class DetailPemeriksaan extends Component
 
     protected $rules = [
         'approval_state' => 'required',
-        'comment'        => 'required|string|min:5',
+        'comment'        => 'required|string',
     ];
 
     public function mount($id, $role)
@@ -44,8 +44,9 @@ class DetailPemeriksaan extends Component
     public function save()
     {
         // $this->validate($this->rules); mesti dibuat sekretaris dan non sekretaris
+        $this->validate($this->rules);
 
-        switch(getModelRelationship($this->reference_id)['abbreviation'])
+        switch(explode('-', $this->reference_id)[0])
         {
             case "PM":
                 $paketMeetingRepository = new PaketMeetingRepository;
