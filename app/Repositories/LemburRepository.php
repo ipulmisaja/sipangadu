@@ -25,9 +25,9 @@ class LemburRepository
 
     public function store($data) : string
     {
-        try {
-            DB::beginTransaction();
+        DB::beginTransaction();
 
+        try {
             $lembur = Lembur::create([
                 'tanggal_pengajuan' => Carbon::parse($data->tanggal_pengajuan, 'UTC'),
                 'nomor_pengajuan'   => $data->nota_dinas,
@@ -54,8 +54,6 @@ class LemburRepository
                 'tanggal_pengajuan' => $lembur->tanggal_pengajuan
             ]);
 
-            $message = 'Informasi lembur telah disimpan.';
-
             $telegramId = $this->getParentTelegramId($pemeriksaan);
 
             is_null($telegramId) ?:
@@ -65,26 +63,26 @@ class LemburRepository
                     Auth::user()->name . ". Mohon dilakukan pemeriksaan, terima kasih."
                 );
 
+            $message = $this->throwMessageSuccess('store');
+
             DB::commit();
         } catch(Exception $error) {
             DB::rollBack();
 
-            Log::alert($error->getMessage());
 
-            $message = 'Informasi lembur gagal disimpan.';
         }
 
         return $message;
     }
 
-    public function updateApproval(string $role, $data)
+    public function updateApproval(string $role, $data) : string
     {
         switch($role)
         {
             case 'koordinator' :
-                try {
-                    DB::beginTransaction();
+                DB::beginTransaction();
 
+                try {
                     $data->activity->update([
                         'approve_kf'         => $data->approval_state,
                         'tanggal_approve_kf' => Carbon::now()
@@ -112,20 +110,24 @@ class LemburRepository
                                 "Pengajuan belanja " . $data->activity->lemburRelationship->nama . " ditolak oleh koordinator fungsi/kepala bagian." .
                                 "\n\nMohon lakukan perbaikan, terima kasih."
                             );
-                    } else {}
+                    }
+
+                    $message = "Informasi Hasil Pemeriksaan Telah Disimpan, Terima Kasih.";
 
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    Log::alert($error->getMessage());
+                    $message = $this->throwMessageError($error);
                 }
+
+                return $message;
 
                 break;
             case 'binagram' :
-                try {
-                    DB::beginTransaction();
+                DB::beginTransaction();
 
+                try {
                     $data->activity->update([
                         'approve_binagram'         => $data->approval_state,
                         'tanggal_approve_binagram' => Carbon::now()
@@ -146,11 +148,13 @@ class LemburRepository
                             );
                     }
 
+                    $message = "Informasi Hasil Pemeriksaan Telah Disimpan, Terima Kasih.";
+
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    Log::alert($error->getMessage());
+                    $message
                 }
 
                 break;
@@ -280,8 +284,58 @@ class LemburRepository
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    Log::alert($error->getMessage());
+                    $message = $this->throwMessageError('approval', $error);
                 }
+
+                return $message;
+
+                break;
+        }
+    }
+
+    private function throwMessageSuccess(string $type) : array
+    {
+        switch($type)
+        {
+            case 'store' :
+                return [
+                    'type'    => 'success',
+                    'message' => 'Informasi Pengajuan Lembur Telah Disimpan, Terima Kasih.'
+                ];
+
+                break;
+            case 'update' :
+                break;
+            case 'approval' :
+                return [
+                    'type'    => 'success',
+                    'message' => 'Informasi Hasil Pemeriksaan Telah Disimpan, Terima Kasih.'
+                ];
+
+                break;
+        }
+    }
+
+    private function throwMessageError(string $type, Exception $error) : array
+    {
+        Log::alert($error->getMessage());
+
+        switch($type)
+        {
+            case 'store' :
+                return [
+                    'type' => 'error',
+                    'message' => 'Informasi Pengajuan Lembur Gagal Disimpan, Silahkan Hubungi Administrator.'
+                ];
+
+                break;
+            case 'update' :
+                break;
+            case 'approval' :
+                return [
+                    'type'    => 'error',
+                    'message' => 'Informasi Hasil Pemeriksaan Gagal Disimpan, Silahkan Hubungi Administrator.'
+                ];
 
                 break;
         }
