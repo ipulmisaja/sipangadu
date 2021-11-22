@@ -1,6 +1,6 @@
 @php
     if ($stage === 'lembur' || $stage === 'perjadin') {
-        $array = array($model->approve_ppk, $model->approve_binagram, $model->approve_ppk, $model->approve_kepala);
+        $array = array($model->approve_kf, $model->approve_binagram, $model->approve_ppk, $model->approve_kepala);
         arsort($array);
         if(array_sum($array) === 0) {
             echo "<span class='badge badge-info font-weight-bold'>
