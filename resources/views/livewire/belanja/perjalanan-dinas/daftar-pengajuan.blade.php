@@ -75,7 +75,7 @@
                                                             </td>
                                                             <td>
                                                                 @include('components.state.approval', [
-                                                                    'model' => $item,
+                                                                    'model' => $item->pemeriksaanRelationship,
                                                                     'stage' => 'perjadin'
                                                                 ])
                                                             </td>
