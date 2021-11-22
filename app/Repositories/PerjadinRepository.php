@@ -78,11 +78,11 @@ class PerjadinRepository
 
     public function updateApproval(string $role, $data) : array
     {
+        DB::beginTransaction();
+
         switch($role)
         {
             case 'koordinator' :
-                DB::beginTransaction();
-
                 try {
                     $data->activity->update([
                         'approve_kf'         => $data->approval_state,
@@ -122,12 +122,8 @@ class PerjadinRepository
                     $message = $this->fail('approval', $error);
                 }
 
-                return $message;
-
                 break;
             case 'binagram' :
-                DB::beginTransaction();
-
                 try {
                     $data->activity->update([
                         'approve_binagram'         => $data->approval_state,
@@ -158,12 +154,8 @@ class PerjadinRepository
                     $message = $this->fail('approval', $error);
                 }
 
-                return $message;
-
                 break;
             case 'ppk':
-                DB::beginTransaction();
-
                 try {
                     $data->activity->update([
                         'approve_ppk'         => $data->approval_state,
@@ -225,12 +217,8 @@ class PerjadinRepository
                     $message = $this->fail('approval', $error);
                 }
 
-                return $message;
-
                 break;
             case 'kpa':
-                DB::beginTransaction();
-
                 try {
                     $data->activity->update([
                         'approve_kepala'         => $data->approval_state,
@@ -280,10 +268,10 @@ class PerjadinRepository
                     $message = $this->fail('approval', $error);
                 }
 
-                return $message;
-
                 break;
             default:
         }
+
+        return $message;
     }
 }

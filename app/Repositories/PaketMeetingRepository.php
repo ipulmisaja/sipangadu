@@ -5,29 +5,28 @@ namespace App\Repositories;
 use App\Jobs\KirimNotifikasiTelegram;
 use App\Models\Berkas;
 use App\Models\PaketMeeting;
-use App\Models\Payment;
 use App\Models\Pemeriksaan;
 use App\Models\TindakLanjut;
 use App\Models\Unit;
 use App\Traits\Commentable;
 use App\Traits\GDriveUploadable;
 use App\Traits\HasTelegram;
+use App\Traits\ThrowMessageable;
 use App\Traits\UserIdTrait;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PaketMeetingRepository
 {
-    use Commentable, GDriveUploadable, HasTelegram, UserIdTrait;
+    use Commentable, GDriveUploadable, HasTelegram, ThrowMessageable, UserIdTrait;
 
-    public function store($data) : string
+    public function store($data) : array
     {
-        try {
-            DB::beginTransaction();
+        DB::beginTransaction();
 
+        try {
             $drivePath = $this->uploadFile(env('GOOGLE_DRIVE_FOLDER_BELANJA'), $data->file);
 
             $paketMeeting = PaketMeeting::create([
@@ -48,9 +47,6 @@ class PaketMeetingRepository
                 'tanggal_pengajuan' => $paketMeeting->tanggal_pengajuan
             ]);
 
-
-            $message = 'Informasi paket meeting telah disimpan.';
-
             $telegramId = $this->getParentTelegramId($pemeriksaan);
 
             is_null($telegramId) ?:
@@ -60,28 +56,28 @@ class PaketMeetingRepository
                     Auth::user()->nama . ". Mohon dilakukan pemeriksaan, terima kasih."
                 );
 
+            $message = $this->success('store');
+
             DB::commit();
         } catch(Exception $error) {
             DB::rollBack();
 
             $this->deleteFile($drivePath['basename']);
 
-            Log::alert($error->getMessage());
-
-            $message = 'Informasi paket meeting gagal disimpan.';
+            $message = $this->fail('store', $error);
         }
 
         return $message;
     }
 
-    public function updateApproval(string $role, $data)
+    public function updateApproval(string $role, $data) : array
     {
+        DB::beginTransaction();
+
         switch($role)
         {
             case 'koordinator' :
                 try {
-                    DB::beginTransaction();
-
                     $data->activity->update([
                         'approve_kf'         => $data->approval_state,
                         'tanggal_approve_kf' => Carbon::now()
@@ -109,20 +105,20 @@ class PaketMeetingRepository
                                 "Pengajuan belanja " . $data->activity->paketMeetingRelationship->nama . " ditolak oleh koordinator fungsi/kepala bidang." .
                                 "\n\nMohon lakukan perbaikan, terima kasih."
                             );
-                    } else {}
+                    }
+
+                    $message = $this->success('approval');
 
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    Log::alert($error->getMessage());
+                    $message = $this->fail('approval', $error);
                 }
 
                 break;
             case 'binagram' :
                 try {
-                    DB::beginTransaction();
-
                     $data->activity->update([
                         'approve_binagram'         => $data->approval_state,
                         'tanggal_approve_binagram' => Carbon::now()
@@ -143,17 +139,18 @@ class PaketMeetingRepository
                             );
                     }
 
+                    $message = $this->success('approval');
+
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    Log::alert($error->getMessage());
+                    $message = $this->fail('approval', $error);
                 }
+
                 break;
             case 'ppk':
                 try {
-                    DB::beginTransaction();
-
                     $data->activity->update([
                         'approve_ppk'         => $data->approval_state,
                         'tanggal_approve_ppk' => Carbon::now()
@@ -218,13 +215,18 @@ class PaketMeetingRepository
                             );
                     }
 
+                    $message = $this->success('approval');
+
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    Log::alert($error->getMessage());
+                    $message = $this->fail('approval', $error);
                 }
+
                 break;
         }
+
+        return $message;
     }
 }

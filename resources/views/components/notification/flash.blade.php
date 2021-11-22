@@ -4,7 +4,7 @@
             <button class="close" data-dismiss="alert">
                 <span>×</span>
             </button>
-            {{ session('message') }}
+            {{ session('success') }}
         </div>
     </div>
 @elseif(session()->has('error'))
@@ -13,7 +13,7 @@
             <button class="close" data-dismiss="alert">
                 <span>×</span>
             </button>
-            {{ session('message') }}
+            {{ session('error') }}
         </div>
     </div>
 @endif

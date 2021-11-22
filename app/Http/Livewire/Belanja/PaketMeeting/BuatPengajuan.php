@@ -96,7 +96,7 @@ class BuatPengajuan extends Component
 
         $result = $paketMeetingRepository->store($this);
 
-        session()->flash('message', $result);
+        session()->flash($result['type'], $result['message']);
 
         return redirect(env('APP_URL') . 'belanja/paket-meeting');
     }

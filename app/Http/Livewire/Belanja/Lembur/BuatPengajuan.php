@@ -55,7 +55,7 @@ class BuatPengajuan extends Component
 
         $result = $lemburRepository->store($this);
 
-        session()->flash('message', $result);
+        session()->flash($result['type'], $result['message']);
 
         return redirect(env('APP_URL') . 'belanja/lembur');
     }

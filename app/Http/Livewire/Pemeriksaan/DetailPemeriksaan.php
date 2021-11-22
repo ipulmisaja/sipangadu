@@ -51,9 +51,9 @@ class DetailPemeriksaan extends Component
             case "PM":
                 $paketMeetingRepository = new PaketMeetingRepository;
 
-                $paketMeetingRepository->updateApproval($this->role, $this);
+                $result = $paketMeetingRepository->updateApproval($this->role, $this);
 
-                session()->flash('message', 'Informasi telah disimpan.');
+                session()->flash($result['type'], $result['message']);
 
                 return redirect(env('APP_URL') . 'pemeriksaan');
 
@@ -61,9 +61,9 @@ class DetailPemeriksaan extends Component
             case "LB":
                 $lemburRepository = new LemburRepository;
 
-                $lemburRepository->updateApproval($this->role, $this);
+                $result = $lemburRepository->updateApproval($this->role, $this);
 
-                session()->flash('message', 'Informasi telah disimpan.');
+                session()->flash($result['type'], $result['message']);
 
                 return redirect(env('APP_URL') . 'pemeriksaan');
 

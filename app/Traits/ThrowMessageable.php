@@ -14,7 +14,7 @@ trait ThrowMessageable
             case 'store' :
                 return [
                     'type'    => 'success',
-                    'message' => 'Informasi Pengajuan Perjalanan Dinas Telah Disimpan, Terima Kasih.'
+                    'message' => 'Informasi Pengajuan Belanja Telah Disimpan, Terima Kasih.'
                 ];
 
                 break;
@@ -38,8 +38,8 @@ trait ThrowMessageable
         {
             case 'store' :
                 return [
-                    'type' => 'error',
-                    'message' => 'Informasi Pengajuan Perjalanan Dinas Gagal Disimpan, Silahkan Hubungi Administrator.'
+                    'type'    => 'error',
+                    'message' => 'Informasi Pengajuan Belanja Gagal Disimpan, Silahkan Hubungi Administrator.'
                 ];
 
                 break;
