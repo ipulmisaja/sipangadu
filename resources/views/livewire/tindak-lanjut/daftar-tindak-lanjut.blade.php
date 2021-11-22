@@ -78,7 +78,7 @@
                                                     </td>
                                                     <td>
                                                         <a
-                                                            href="{{ url(env('APP_URL') . 'tindak-lanjut/' . $item->reference_id . '/detail') }}"
+                                                            href="{{ url(env('APP_URL') . 'tindak-lanjut/detail/' . $item->reference_id) }}"
                                                             class="btn btn-icon btn-info"
                                                             data-toggle="tooltip"
                                                             data-placement="bottom"

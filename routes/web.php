@@ -74,7 +74,7 @@ Route::layout('layouts.app')->middleware('auth')->group(function() {
 
     // Tindak Lanjut Hasil Pemeriksaan Pengajuan Belanja
     Route::livewire('tindak-lanjut/{unit}', 'tindak-lanjut.daftar-tindak-lanjut');
-    Route::livewire('tindak-lanjut/{id}', 'tindak-lanjut.detail-tindak-lanjut');
+    Route::livewire('tindak-lanjut/detail/{id}', 'tindak-lanjut.detail-tindak-lanjut');
 
     Route::prefix('berkas')->group(function() {
         Route::livewire('daftar-berkas', 'berkas.pengumpulan.daftar-berkas');

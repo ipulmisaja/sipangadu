@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\TindakLanjut;
 
-use App\Models\Kegiatan;
 use App\Models\Pok;
 use App\Models\PencairanAnggaran;
+use App\Models\TindakLanjut;
 use App\Traits\GenerateDocument;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -15,31 +15,35 @@ class DetailTindakLanjut extends Component
 
     public $activity;
     public $activityGroup;
-    public $proposalId;
+    public $reference_id;
     public $file;
+    public $budgetTemp;
+    public $volumeTemp;
+    public $satuanTemp;
 
-    public function mount($activity)
+
+    public function mount($id)
     {
-        $this->proposalId = $activity;
+        $this->reference_id = $id;
     }
 
     public function render()
     {
-        $relationship = getModelRelationship($this->proposalId)['relationship'];
+        $relationship = getModelRelationship($this->reference_id)['relationship'];
 
-        $this->activity = Kegiatan::with($relationship)->where('proposal_id', $this->proposalId)->first();
+        $this->activity = TindakLanjut::with($relationship)->where('reference_id', $this->reference_id)->first();
 
-        $budgetTemp = Pok::where('id', $this->activity->$relationship->pok_id)->pluck('total')[0] -
+        $this->budgetTemp = Pok::where('id', $this->activity->$relationship->pok_id)->pluck('total')[0] -
                       PencairanAnggaran::where('pok_id', $this->activity->$relationship->pok_id)->sum('total');
 
-        $volumeTemp = Pok::where('id', $this->activity->$relationship->pok_id)->pluck('volume')[0] -
+        $this->volumeTemp = Pok::where('id', $this->activity->$relationship->pok_id)->pluck('volume')[0] -
                       PencairanAnggaran::where('pok_id', $this->activity->$relationship->pok_id)->sum('volume');
 
-        $satuanTemp = Pok::where('id', $this->activity->$relationship->pok_id)->pluck('satuan')[0];
+        $this->satuanTemp = Pok::where('id', $this->activity->$relationship->pok_id)->pluck('satuan')[0];
 
-        $this->activityGroup = array($this->activity, $budgetTemp, $volumeTemp, $satuanTemp);
+        $this->activityGroup = array($this->activity, $this->budgetTemp, $this->volumeTemp, $this->satuanTemp);
 
-        $relationship !== 'tripRelationship' ?: $this->letterOfAssignment($this->proposalId);
+        // $relationship !== 'tripRelationship' ?: $this->letterOfAssignment($this->reference_id);
 
         return view('livewire.tindak-lanjut.detail-tindak-lanjut');
     }

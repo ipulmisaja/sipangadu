@@ -101,7 +101,7 @@
             </li>
         @else
             <li>
-                Belanja Kegiatan ini diajukan pada tanggal <b>{{ DateFormat::convertDateTime($detail->kegiatanRelationship->tanggal_pengajuan) }}</b>
+                Belanja Kegiatan ini diajukan pada tanggal <b>{{ DateFormat::convertDateTime($detail->pemeriksaanRelationship->tanggal_pengajuan) }}</b>
             </li>
         @endif
 
@@ -166,25 +166,25 @@
             ])
         @else
             @include('components.state.approval-on-detail', [
-                'data' => $detail->kegiatanRelationship->approve_kf,
+                'data' => $detail->pemeriksaanRelationship->approve_kf,
                 'name' => 'Koordinator Fungsi',
-                'date' => $detail->kegiatanRelationship->tanggal_approve_kf
+                'date' => $detail->pemeriksaanRelationship->tanggal_approve_kf
             ])
 
             <div class="mt-1"><br></div>
 
             @include('components.state.approval-on-detail', [
-                'data' => $detail->kegiatanRelationship->approve_ppk,
+                'data' => $detail->pemeriksaanRelationship->approve_ppk,
                 'name' => 'Pejabat Pembuat Komitmen',
-                'date' => $detail->kegiatanRelationship->tanggal_approve_ppk
+                'date' => $detail->pemeriksaanRelationship->tanggal_approve_ppk
             ])
 
             @if($type === 'overtime' || $type === 'trip')
                 <div class="mt-1"><br></div>
                 @include('components.state.approval-on-detail', [
-                    'data' => $detail->kegiatanRelationship->approve_kepala,
+                    'data' => $detail->pemeriksaanRelationship->approve_kepala,
                     'name' => 'Kepala BPS Provinsi Sulawesi Barat',
-                    'date' => $detail->kegiatanRelationship->tanggal_approve_kepala
+                    'date' => $detail->pemeriksaanRelationship->tanggal_approve_kepala
                 ])
             @endif
         @endif
