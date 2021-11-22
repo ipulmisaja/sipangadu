@@ -71,9 +71,9 @@ class DetailPemeriksaan extends Component
             case "PD":
                 $perjadinRepository = new PerjadinRepository;
 
-                $perjadinRepository->updateApproval($this->role, $this);
+                $result = $perjadinRepository->updateApproval($this->role, $this);
 
-                session()->flash('message', 'Informasi telah disimpan.');
+                session()->flash($result['type'], $result['message']);
 
                 return redirect(env('APP_URL') . 'pemeriksaan');
 

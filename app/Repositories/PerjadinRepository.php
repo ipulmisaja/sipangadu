@@ -10,16 +10,16 @@ use App\Models\PerjalananDinas;
 use App\Models\TindakLanjut;
 use App\Traits\Commentable;
 use App\Traits\HasTelegram;
+use App\Traits\ThrowMessageable;
 use App\Traits\UserIdTrait;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PerjadinRepository
 {
-    use Commentable, HasTelegram, UserIdTrait;
+    use Commentable, HasTelegram, ThrowMessageable, UserIdTrait;
 
     public function store($data) : array
     {
@@ -64,13 +64,13 @@ class PerjadinRepository
                     Auth::user()->name . ". Mohon dilakukan pemeriksaan, terima kasih."
                 );
 
-            $message = $this->throwMessageSuccess('store');
+            $message = $this->success('store');
 
             DB::commit();
         } catch(Exception $error) {
             DB::rollBack();
 
-            $message = $this->throwMessageError('store', $error);
+            $message = $this->fail('store', $error);
         }
 
         return $message;
@@ -113,13 +113,13 @@ class PerjadinRepository
                             );
                     }
 
-                    $message = $this->throwMessageSuccess('approval');
+                    $message = $this->success('approval');
 
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    $message = $this->throwMessageError('approval', $error);
+                    $message = $this->fail('approval', $error);
                 }
 
                 return $message;
@@ -149,13 +149,13 @@ class PerjadinRepository
                             );
                     }
 
-                    $message = $this->throwMessageSuccess('approval');
+                    $message = $this->success('approval');
 
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    $message = $this->throwMessageError('approval', $error);
+                    $message = $this->fail('approval', $error);
                 }
 
                 return $message;
@@ -216,13 +216,13 @@ class PerjadinRepository
                             );
                     }
 
-                    $message = $this->throwMessageSuccess('approval');
+                    $message = $this->success('approval');
 
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    $message = $this->throwMessageError('approval', $error);
+                    $message = $this->fail('approval', $error);
                 }
 
                 return $message;
@@ -271,67 +271,19 @@ class PerjadinRepository
                             );
                     }
 
-                    $message = $this->throwMessageSuccess('approval');
+                    $message = $this->success('approval');
 
                     DB::commit();
                 } catch(Exception $error) {
                     DB::rollBack();
 
-                    $message = $this->throwMessageError('approval', $error);
+                    $message = $this->fail('approval', $error);
                 }
 
                 return $message;
 
                 break;
             default:
-        }
-    }
-
-    private function throwMessageSuccess(string $type) : array
-    {
-        switch($type)
-        {
-            case 'store' :
-                return [
-                    'type'    => 'success',
-                    'message' => 'Informasi Pengajuan Perjalanan Dinas Telah Disimpan, Terima Kasih.'
-                ];
-
-                break;
-            case 'update' :
-                break;
-            case 'approval' :
-                return [
-                    'type'    => 'success',
-                    'message' => 'Informasi Hasil Pemeriksaan Telah Disimpan, Terima Kasih.'
-                ];
-
-                break;
-        }
-    }
-
-    private function throwMessageError(string $type, Exception $error) : array
-    {
-        Log::alert($error->getMessage());
-
-        switch($type)
-        {
-            case 'store' :
-                return [
-                    'type' => 'error',
-                    'message' => 'Informasi Pengajuan Perjalanan Dinas Gagal Disimpan, Silahkan Hubungi Administrator.'
-                ];
-
-                break;
-            case 'update' :
-                break;
-            case 'approval' :
-                return [
-                    'type'    => 'error',
-                    'message' => 'Informasi Hasil Pemeriksaan Gagal Disimpan, Silahkan Hubungi Administrator.'
-                ];
-
-                break;
         }
     }
 }
