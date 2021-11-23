@@ -36,9 +36,10 @@
                                         <tbody>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Kode Anggaran dan Nama Kegiatan</th>
-                                                <th>Berkas Pencairan</th>
+                                                <th>Nama dan Pagu Kegiatan</th>
                                                 <th>Status Verifikasi</th>
+                                                <th>Catatan Verifikator</th>
+                                                <th>Berkas Kegiatan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                             @foreach ($daftarBerkas->paginate(20) as $index => $berkas)

@@ -12,10 +12,8 @@
                 $activity->pokRelationship->kd_subkomponen . '.' .
                 $activity->pokRelationship->kd_akun
             }}
-        </small><br>
-        <span class="font-weight-bold text-primary">
-            {{ $activity->pokRelationship->deskripsi }}
-        </span>
+            ({{ $activity->pokRelationship->deskripsi }})
+        </small>
     </div>
     <div class="my-2">
         <i class="fas fa-file-alt"></i>
@@ -25,22 +23,29 @@
     </div>
 </td>
 
+{{-- Status Verifikasi Berkas --}}
+<td>
+    <label class="mt-4">
+        @include('components.state.verifikasi', [
+            'verifikasi' => $model->verifikasi
+        ])
+    </label>
+</td>
+
+{{-- Catatan Verifikasi --}}
+<td>
+    @if (!is_null($model->catatan_verifikator))
+        <p>{{ strip_tags($model->catatan_verifikator) }}</p>
+    @else
+        <span>Tidak Ada Catatan</span>
+    @endif
+</td>
+
 {{-- Status Unggah Berkas --}}
 <td>
     @include('components.state.berkas', [
         'file' => $model->file
     ])
-</td>
-
-{{-- Status Verifikasi Berkas --}}
-<td>
-    <label class="mt-4">
-        @include('components.state.verifikasi', [
-            'verifikasi' => $model->verification
-        ])
-    </label>
-    <br>
-    <p><i>Catatan: {{ strip_tags($model->verificator_note) ?? 'Tidak Ada Catatan' }}</i></p>
 </td>
 
 {{-- Aksi --}}
