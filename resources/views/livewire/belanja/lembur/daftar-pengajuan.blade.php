@@ -22,6 +22,23 @@
                                     Ajukan Lembur
                                 </a>
                             </h4>
+                            @role('admin')
+                                <div class="card-header-form d-flex">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <button wire:click="user" type="button" class="btn {{ $stage === 'user' ? 'btn-primary' : 'btn-outline-primary' }}">Daftar Saya</button>
+                                        <button wire:click="admin" type="button" class="btn {{ $stage === 'admin' ? 'btn-primary' : 'btn-outline-primary' }}">Daftar Administrator</button>
+                                    </div>
+                                    <div class="mx-3 border-left"></div>
+                                    <form>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Cari">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endrole
                         </div>
                         <div class="card-body">
                             <div class="row">
