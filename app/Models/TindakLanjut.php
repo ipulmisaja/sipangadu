@@ -10,7 +10,13 @@ class TindakLanjut extends Model
 
     protected $fillable = [
         'reference_id',
-        'tanggal_dibuat'
+        'tanggal_dibuat',
+        'status_kepegawaian',
+        'tgl_followup_kepegawaian',
+        'status_keuangan',
+        'tgl_followup_keuangan',
+        'status_barjas',
+        'tgl_followup_barjas'
     ];
 
     public $timestamps = false;

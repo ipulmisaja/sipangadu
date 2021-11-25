@@ -17,14 +17,28 @@
                 <div class="col-12">
                     <div class="card border rounded">
                         <div class="card-header">
-                            <h4></h4>
-                            <div class="card-header-form">
+                            <h4>
                                 <select class="form-control">
                                     <option value="null">- Pilih Jenis Kegiatan -</option>
                                     <option value="FB">Paket Meeting</option>
                                     <option value="LB">Lembur</option>
                                     <option value="PD">Perjalanan Dinas</option>
                                 </select>
+                            </h4>
+                            <div class="card-header-form d-flex">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button wire:click="undone" type="button" class="btn {{ $status === 'undone' ? 'btn-primary' : 'btn-outline-primary' }}">Belum Tindak Lanjut <b>({{ $jumlahTindakLanjut[0] }})</b></button>
+                                    <button wire:click="done" type="button" class="btn {{ $status === 'done' ? 'btn-primary' : 'btn-outline-primary' }}">Selesai Tindak Lanjut <b>({{ $jumlahTindakLanjut[1] }})</b></button>
+                                </div>
+                                <div class="mx-3 border-left"></div>
+                                <form>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Cari">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="card-body">
@@ -34,10 +48,10 @@
                                         <tbody>
                                             {{-- Columns --}}
                                             <tr>
-                                                <th>Jenis Kegiatan</th>
+                                                <th>Tanggal</th>
                                                 <th>Nama Kegiatan</th>
                                                 <th>Pagu Kegiatan</th>
-                                                <th>Pengusul Kegiatan</th>
+                                                <th>Pengusul</th>
                                                 <th>Aksi</th>
                                             </tr>
 
@@ -48,15 +62,16 @@
                                                     $relationship = getModelRelationship($item->reference_id)['relationship'];
                                                 @endphp
                                                 <tr>
-                                                    <td width="10%">
-                                                        <span class="badge {{ getModelRelationship($item->reference_id)['badge'] }}">
-                                                            {{ getModelRelationship($item->reference_id)['name'] }}
-                                                        </span>
+                                                    <td width="12%">
+                                                        {{ DateFormat::convertDateTime($item->tanggal_dibuat ) }}
                                                     </td>
-                                                    <td class="py-3">
+                                                    <td class="py-3" width="30%">
+                                                        <div class="bg-warning py-1 px-2 rounded text-white mb-2" style="display: inline-block">
+                                                            {{ getModelRelationship($item->reference_id)['name'] }}
+                                                        </div><br>
                                                         {{ $item->$relationship->nama }}
                                                     </td>
-                                                    <td>
+                                                    <td width="30%">
                                                         <label class="font-weight-bold text-primary">
                                                             {{
                                                                 '054.01.' .
@@ -86,6 +101,31 @@
                                                             data-original-title="Lihat">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
+                                                        @if (auth()->user()->hasUnit('kepeghum'))
+                                                        @elseif (auth()->user()->hasUnit('keuangan'))
+                                                            @if ($item->status_keuangan == 1)
+                                                                <a
+                                                                    wire:click="followup('{{ $item->reference_id }}', {{ $item->status_keuangan }}, 'keuangan')"
+                                                                    class="ml-2 btn btn-icon btn-danger text-white"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="bottom"
+                                                                    title=""
+                                                                    data-original-title="Batalkan Tindak Lanjut">
+                                                                    <i class="fas fa-times-circle"></i>
+                                                                </a>
+                                                            @else
+                                                                <a
+                                                                    wire:click="followup('{{ $item->reference_id }}', {{ $item->status_keuangan }}, 'keuangan')"
+                                                                    class="ml-2 btn btn-icon btn-warning text-white"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="bottom"
+                                                                    title=""
+                                                                    data-original-title="Tandai Selesai Tindak Lanjut">
+                                                                    <i class="fas fa-check-circle"></i>
+                                                                </a>
+                                                            @endif
+                                                        @elseif (auth()->user()->hasUnit('pengadaan-barjas'))
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach

@@ -205,7 +205,7 @@
                             {{-- Unduh/Preview Berkas --}}
                             <div class="form-group">
                                 <p class="h6 font-weight-bold">
-                                    <i class="fas fa-search"></i>
+                                    <i class="fas fa-download"></i>
                                     <span class="ml-2">
                                         @switch($relationship)
                                             @case('paketMeetingRelationship')
@@ -240,7 +240,6 @@
                                     </p>
                                     <div class="ml-4">{!! $activityGroup[0]->$relationship->catatan !!}</div>
                                 </div>
-                                <hr>
                             @endif
                         </div>
                     </div>
@@ -255,7 +254,45 @@
                             <span style="font-size: 1.5rem">Tindak Lanjut</span>
                         </div>
                         <div class="card-body">
-                            maaf, fitur ini masih dalam tahap perbaikan.
+                            @if (auth()->user()->hasUnit('kepeghum'))
+
+                            @elseif (auth()->user()->hasUnit('keuangan'))
+                                <div class="form-group">
+                                    <p class="h6 font-weight-bold">
+                                        <i class="fas fa-download"></i>
+                                        <span class="ml-2">Unduh Surat Tugas (belum berfungsi)</span>
+                                    </p>
+                                    <a
+                                        href=""
+                                        class="ml-4 mt-2 btn btn-icon icon-left btn-info">
+                                        <i class="fa fa-download"></i>
+                                        <span class="ml-1">Unduh</span>
+                                    </a>
+                                </div>
+                                <hr>
+
+                                <div class="form-group">
+                                    <p class="h6 font-weight-bold">
+                                        <i class="fas fa-check-double"></i>
+                                        <span class="ml-2">Selesaikan Tindak Lanjut</span>
+                                    </p>
+                                    <div class="ml-4 custom-control custom-checkbox">
+                                        <input
+                                            wire:click="followup('{{ $activityGroup[0]->reference_id }}', {{ $activityGroup[0]->status_keuangan }}, 'keuangan')"
+                                            type="checkbox"
+                                            class="custom-control-input" id="followup"
+                                            @if($activityGroup[0]->status_keuangan == 1) checked @endif>
+                                        <label class="custom-control-label" for="followup">
+                                            {{
+                                                $activityGroup[0]->status_keuangan == 0
+                                                    ? 'Pengajuan Ini Belum Ditindaklanjuti.'
+                                                    : 'Pengajuan Ini Telah Ditindaklanjuti.'
+                                            }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @elseif (auth()->user()->hasUnit('pengadaan-barjas'))
+                            @endif
                         </div>
                     </div>
                 </div>

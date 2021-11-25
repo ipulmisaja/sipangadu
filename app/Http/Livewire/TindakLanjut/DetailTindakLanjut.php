@@ -5,6 +5,7 @@ namespace App\Http\Livewire\TindakLanjut;
 use App\Models\Pok;
 use App\Models\PencairanAnggaran;
 use App\Models\TindakLanjut;
+use App\Repositories\FollowUpRepository;
 use App\Traits\GenerateDocument;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -46,5 +47,14 @@ class DetailTindakLanjut extends Component
         // $relationship !== 'tripRelationship' ?: $this->letterOfAssignment($this->reference_id);
 
         return view('livewire.tindak-lanjut.detail-tindak-lanjut');
+    }
+
+    public function followup(FollowUpRepository $followUpRepository, string $reference_id, int $status, string $unit)
+    {
+        $result = $followUpRepository->followup($reference_id, $unit, $status);
+
+        session()->flash($result['type'], $result['message']);
+
+        return redirect(env('APP_URL') . 'tindak-lanjut/' . $unit);
     }
 }
