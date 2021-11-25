@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 trait ThrowMessageable
 {
-    public function success(string $type) : array
+    public function success(string $type, string $message = null) : array
     {
         switch($type)
         {
@@ -27,10 +27,15 @@ trait ThrowMessageable
                 ];
 
                 break;
+            case 'followup' :
+                return [
+                    'type'    => 'success',
+                    'message' => $message
+                ];
         }
     }
 
-    public function fail(string $type, Exception $error) : array
+    public function fail(string $type, Exception $error, string $message = null) : array
     {
         Log::alert($error->getMessage());
 
@@ -49,6 +54,13 @@ trait ThrowMessageable
                 return [
                     'type'    => 'error',
                     'message' => 'Informasi Hasil Pemeriksaan Gagal Disimpan, Silahkan Hubungi Administrator.'
+                ];
+
+                break;
+            case 'followup' :
+                return [
+                    'type'    => 'error',
+                    'message' => $message
                 ];
 
                 break;
