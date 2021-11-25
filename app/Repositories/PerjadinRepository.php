@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Jobs\KirimNotifikasiTelegram;
 use App\Models\DetailPerjalananDinas;
-use App\Models\Berkas;
 use App\Models\Pemeriksaan;
 use App\Models\PerjalananDinas;
 use App\Models\TindakLanjut;
@@ -39,7 +38,7 @@ class PerjadinRepository
 
             foreach($data->tripList as $item) {
                 DetailPerjalananDinas::create([
-                    'perjadin_id'       => $perjadin->id,
+                    'reference_id'      => $perjadin->reference_id,
                     'user_id'           => $item['employee'],
                     'tujuan'            => $item['destination'],
                     'tanggal_berangkat' => Carbon::parse(explode('to', $item['tripdate'])[0], 'UTC'),
@@ -184,6 +183,7 @@ class PerjadinRepository
                         $tripDetail = DetailPerjalananDinas::where('perjadin_id', $data->activity->perjadinRelationship->id)->get();
 
                         foreach($tripDetail as $trip) {
+                            $trip->update(['reference_id' => $data->activity->reference_id]);
                             // Pemberian Nomor Urut Surat Tugas
                             if(is_null(DetailPerjalananDinas::max('mail_number'))) {
                                 $trip->update(['mail_number' => 1]);
@@ -191,11 +191,6 @@ class PerjadinRepository
                                 $max = DetailPerjalananDinas::max('mail_number');
                                 $trip->update(['mail_number' => $max + 1]);
                             }
-
-                            Berkas::create([
-                                'reference_id' => $data->activity->reference_id,
-                                'user_id'      => $trip->user_id
-                            ]);
                         }
                     } elseif($data->approval_state == 2) {
                         $telegramId = $this->getTelegramId($data->activity->user_id);

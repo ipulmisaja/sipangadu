@@ -10,6 +10,7 @@ class DetailPerjalananDinas extends Model
 
     protected $fillable = [
         'perjadin_id',
+        'reference_id',
         'user_id',
         'tujuan',
         'tanggal_berangkat',
