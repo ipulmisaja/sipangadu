@@ -38,6 +38,7 @@ class PerjadinRepository
 
             foreach($data->tripList as $item) {
                 DetailPerjalananDinas::create([
+                    'perjadin_id'       => $perjadin->id,
                     'reference_id'      => $perjadin->reference_id,
                     'user_id'           => $item['employee'],
                     'tujuan'            => $item['destination'],
