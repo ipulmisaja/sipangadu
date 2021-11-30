@@ -2,11 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Jobs\KirimNotifikasiTelegram;
 use App\Models\Berkas;
 use App\Models\DetailPerjalananDinas;
 use App\Models\Lembur;
 use App\Models\PaketMeeting;
+use App\Models\PerjalananDinas;
 use App\Models\TindakLanjut;
+use App\Traits\HasTelegram;
 use App\Traits\ThrowMessageable;
 use Carbon\Carbon;
 use Exception;
@@ -15,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class FollowUpRepository
 {
-    use ThrowMessageable;
+    use HasTelegram, ThrowMessageable;
 
     public function followup(string $reference_id, string $unit, int $status) : array
     {
@@ -25,9 +28,26 @@ class FollowUpRepository
         {
             $status_type = $this->getStatusName($unit);
 
-            $status == 0
-                ? TindakLanjut::where('reference_id', $reference_id)->update([$status_type[0] => 1, $status_type[1] => Carbon::now()])
-                : TindakLanjut::where('reference_id', $reference_id)->update([$status_type[0] => 0, $status_type[1] => null]);
+            if ($status == 0) {
+                TindakLanjut::where('reference_id', $reference_id)->update([$status_type[0] => 1, $status_type[1] => Carbon::now()]);
+
+                $type = [
+                    'PM' => [PaketMeeting::where('reference_id', $reference_id)->first('user_id')->user_id, 'Paket Meeting'],
+                    'LB' => [Lembur::where('reference_id', $reference_id)->first('user_id')->user_id, 'Lembur'],
+                    'PD' => [PerjalananDinas::where('reference_id', $reference_id)->first('user_id')->user_id, 'Perjalanan Dinas']
+                ][explode('-', $reference_id)[0]];
+
+                $telegramId = $this->getTelegramId($type[0]);
+
+                is_null($telegramId) ?:
+                    KirimNotifikasiTelegram::dispatch(
+                        $telegramId,
+                        "Pengajuan Belanja " . $type[1] . " Nomor : " . $reference_id . ", Telah Ditindaklanjuti Oleh " . $unit .
+                        " Terima kasih."
+                    );
+            } else {
+                TindakLanjut::where('reference_id', $reference_id)->update([$status_type[0] => 0, $status_type[1] => null]);
+            }
 
             $message = $this->success('followup', "Tindak Lanjut Pengajuan Kegiatan Kode " . $reference_id . " Telah Diperbaharui, Terima Kasih.");
 
